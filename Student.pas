@@ -1,3 +1,4 @@
+{$MODE OBJFPC}
 unit Student;
 
 interface
@@ -6,7 +7,7 @@ uses Grading, sysutils;
 
 type
     TNameRecord = record
-        firstname, middlename, lastname: string[100];
+        firstname, middlename, lastname: string[50];
     end;
 
     TGradeLevel = 0..12;
@@ -21,16 +22,30 @@ type
         gradeLevel: TGradeLevel         //0 is kindergarden
     end;
 
-function CreateNameRecord(first, middle, last: string[100]): TNameRecord;
-function ParseGender(genderString: string[8]): TGender;
+    ENameLengthExceed = class(Exception);
+
+function ParseGender(genderString: string): TGender;
 function GradeLevelToString(level: TGradeLevel): string;
-function CreateStudent(): TStudent;
+function CreateStudent(firstname, middlename, lastname: string; 
+                        gender: string; 
+                        dob: TDateTime;
+                        score: TGradeScore;
+                        gradeLevel: TGradeLevel
+                        ): TStudent;
 
 implementation
 
-function CreateNameRecord(first, middle, last: string[100]): TNameRecord;
+function ParseGender(genderString: string): TGender;
 begin
+    genderString := Trim(genderString);
+    if Length(genderString) = 0 then Exit(other);
 
+    case LowerCase(genderString[1]) of 
+        'm' : ParseGender := male;
+        'f' : ParseGender := female;
+    else
+        ParseGender := other;
+    end;
 
 end;
 
@@ -42,19 +57,25 @@ begin
         GradeLevelToString := 'Grade ' + IntToStr(level);
 end;
 
-function CreateStudent( name: TNameRecord; 
-                        gender: TGender; 
+function CreateStudent( firstname, middlename, lastname: string; 
+                        gender: string; 
                         dob: TDateTime;
                         score: TGradeScore;
                         gradeLevel: TGradeLevel
                         ): TStudent;
+var 
+    returnStudent: TStudent;
 begin
-    var returnStudent: TStudent;
-    returnStudent.name.firstname := name.firstname;
-    returnStudent.name.middlename := name.middlename;
-    returnStudent.name.lastname := name.lastname;
+    if Length(firstname) > 50 then raise ENameLengthExceed.Create('Firstname exceeds name length limit.');
+    returnStudent.name.firstname := firstname;
+    
+    if Length(middlename) > 50 then raise ENameLengthExceed.Create('Middlename exceeds name length limit.');
+    returnStudent.name.middlename := middlename;
 
-    returnStudent.gender := gender;
+    if Length(lastname) > 50 then raise ENameLengthExceed.Create('lastname exceeds name length limit.');
+    returnStudent.name.lastname := lastname;
+
+    returnStudent.gender := ParseGender(gender);
     returnStudent.dateofbirth := dob;
     returnStudent.score := score;
     returnStudent.grade := Grading.GetLetterFromScore(score);
