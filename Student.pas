@@ -50,7 +50,7 @@ begin
 
 end;
 
-//
+// Create string out of TGradeLevel
 function GradeLevelToString(level: TGradeLevel): string;
 begin
     if level = 0 then

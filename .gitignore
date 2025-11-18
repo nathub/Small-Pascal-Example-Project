@@ -1,0 +1,4 @@
+### Ignoring everything except the .pas files ###
+*
+!*.pas
+!.gitignore
