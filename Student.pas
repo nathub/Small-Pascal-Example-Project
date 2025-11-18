@@ -35,6 +35,7 @@ function CreateStudent(firstname, middlename, lastname: string;
 
 implementation
 
+// Creates a TGender from a string, accepts 'm*' for male and 'f*' for female 
 function ParseGender(genderString: string): TGender;
 begin
     genderString := Trim(genderString);
@@ -49,6 +50,7 @@ begin
 
 end;
 
+//
 function GradeLevelToString(level: TGradeLevel): string;
 begin
     if level = 0 then
@@ -57,6 +59,7 @@ begin
         GradeLevelToString := 'Grade ' + IntToStr(level);
 end;
 
+//
 function CreateStudent( firstname, middlename, lastname: string; 
                         gender: string; 
                         dob: TDateTime;
