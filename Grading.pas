@@ -15,6 +15,7 @@ function GradeLetterToStr(grade: TGradeLetter): string;
 
 implementation
 
+//
 function GetLetterFromScore(score: TGradeScore): TGradeLetter;
 begin
     case score of
@@ -32,6 +33,7 @@ begin
     end;
 end;
 
+//
 function GradeLetterToStr(grade: TGradeLetter): string;
 begin
     case grade of
